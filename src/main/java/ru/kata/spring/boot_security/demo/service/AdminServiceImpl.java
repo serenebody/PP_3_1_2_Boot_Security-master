@@ -10,6 +10,7 @@ import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(@Valid User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new DataIntegrityViolationException("Пользователь должен быть уникальным!");
         }
@@ -36,7 +37,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(@Valid Long id) {
         Optional<User> optionalUser = Optional.of(getUserById(id));
         if (optionalUser.isPresent()) {
             userRepository.deleteById(id);
@@ -44,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(@Valid User user) {
         User userFromDB = getUserById(user.getId());
         if (!userFromDB.getUsername().equals(user.getUsername())) {
             userRepository.findByUsername(user.getUsername())
