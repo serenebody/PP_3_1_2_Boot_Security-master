@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование пользователя</title>
+</head>
+<body>
+<h2>Редактировать</h2>
+<form th:action="@{/admin/update}" th:method="post">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+
+    <div>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" th:value="${user.username}" required/>
+    </div>
+
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required/>
+    </div>
+
+    <div>
+        <label for="age">Возраст:</label>
+        <input type="number" id="age" name="age" th:value="${user.age}" required/>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${user.email}" required/>
+    </div>
+
+    <div>
+        <label>Роль:</label><br>
+        <input type="checkbox" name="roleNames" value="ROLE_USER"
+               th:checked="${user.roles.contains('ROLE_USER')}"> ROLE_USER<br>
+        <input type="checkbox" name="roleNames" value="ROLE_ADMIN"
+               th:checked="${user.roles.contains('ROLE_ADMIN')}"> ROLE_ADMIN<br>
+    </div>
+    <button type="submit">Принять изменения</button>
+</form>
+<a href="#" th:href="@{/logout}">Выйти</a>
+</body>
+</html>

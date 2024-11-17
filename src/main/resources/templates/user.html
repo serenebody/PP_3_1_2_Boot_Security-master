@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Профиль пользователя</title>
+</head>
+<body>
+
+<div>
+    <h1>Добро пожаловать, <span th:text="${user.username}">Имя пользователя</span>!</h1>
+
+    <h3>Ваша информация:</h3>
+    <ul>
+        <li><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></li>
+        <li><strong>Email:</strong> <span th:text="${user.email}"></span></li>
+        <li><strong>Возраст:</strong> <span th:text="${user.age}"></span></li>
+    </ul>
+
+    <a href="#" th:href="@{/logout}">Выйти</a>
+</div>
+
+</body>
+</html>
