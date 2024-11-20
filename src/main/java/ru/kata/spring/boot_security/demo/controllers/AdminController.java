@@ -16,8 +16,8 @@ import ru.kata.spring.boot_security.demo.service.AdminService;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @Controller
@@ -28,7 +28,7 @@ public class AdminController {
     private final RoleService roleService;
 
     @Autowired
-    public AdminController(AdminService adminService, RoleService roleService, RoleRepository roleRepository) {
+    public AdminController(AdminService adminService, RoleService roleService) {
         this.adminService = adminService;
         this.roleService = roleService;
     }
@@ -54,16 +54,8 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(@Valid @ModelAttribute User user,
-                          @RequestParam(value = "roleNames", required = false) String[] roleNames) {
-        List<Role> roles = new ArrayList<>();
-        if (roleNames != null) {
-            for (String roleName : roleNames) {
-                Role role = roleService.findByName(roleName);
-                if (role != null) {
-                    roles.add(role);
-                }
-            }
-        }
+                          @RequestParam(value = "roleNames", required = false) List<String> roleNames) {
+        Set<Role> roles = roleService.getUserRoles(roleNames);
         user.setRoles(roles);
         adminService.saveUser(user);
         return "redirect:/admin/users";
@@ -80,14 +72,8 @@ public class AdminController {
     public String updateUser(@Valid @ModelAttribute("user") User user,
                              @RequestParam(value = "roleNames", required = false) List<String> roles) {
 
-        if (roles != null) {
-            List<Role> userRoles = new ArrayList<>();
-            for (String roleName : roles) {
-                Role role = roleService.findByName(roleName);
-                userRoles.add(role);
-            }
-            user.setRoles(userRoles);
-        }
+        Set<Role> roleSet = roleService.getUserRoles(roles);
+        user.setRoles(roleSet);
         adminService.updateUser(user);
         return "redirect:/admin/users";
     }

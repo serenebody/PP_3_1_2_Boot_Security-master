@@ -20,6 +20,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -53,12 +55,12 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "idUser"),
             inverseJoinColumns = @JoinColumn(name = "idRole"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String password, int age, String email, List<Role> roles) {
+    public User(String username, String password, int age, String email, Set<Role> roles) {
         this.username = username;
         this.age = age;
         this.email = email;
@@ -110,11 +112,11 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -148,5 +150,22 @@ public class User implements UserDetails {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return age == user.age && Objects.equals(id, user.id)
+                && Objects.equals(username, user.username)
+                && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, age, email, password, roles);
     }
 }

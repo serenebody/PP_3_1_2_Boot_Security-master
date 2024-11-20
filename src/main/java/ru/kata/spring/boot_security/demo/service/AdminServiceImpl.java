@@ -38,10 +38,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteUser(@Valid Long id) {
-        Optional<User> optionalUser = Optional.of(getUserById(id));
-        if (optionalUser.isPresent()) {
+        User user = getUserById(id);
+        if (user != null) {
             userRepository.deleteById(id);
-        }
+        } else throw new EntityNotFoundException("Пользовыатель с id " + id + " не найден для удаления!");
     }
 
     @Override
@@ -62,18 +62,18 @@ public class AdminServiceImpl implements AdminService {
         userRepository.save(user);
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
+    @Transactional(readOnly = true)
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден!"));
     }
-
+    @Transactional(readOnly = true)
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Пользователя с таким ID не существует!"));
