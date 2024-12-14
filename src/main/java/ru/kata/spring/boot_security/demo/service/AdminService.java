@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminService {
     void saveUser(User user);
     void deleteUser(Long id);
-    void updateUser(User user);
+    void updateUser(User user, String rawPassword);
     List<User> getAllUsers();
     User getUserByUsername(String username);
     User getUserById(Long id);

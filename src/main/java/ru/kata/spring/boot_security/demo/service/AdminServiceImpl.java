@@ -12,11 +12,11 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
 public class AdminServiceImpl implements AdminService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateUser(@Valid User user) {
+    public void updateUser (@Valid User user, String rawPassword) {
         User userFromDB = getUserById(user.getId());
         if (!userFromDB.getUsername().equals(user.getUsername())) {
             userRepository.findByUsername(user.getUsername())
@@ -53,11 +53,10 @@ public class AdminServiceImpl implements AdminService {
                         throw new DataIntegrityViolationException("Имя должно быть уникальным!");
                     });
         }
-        String oldPassword = userFromDB.getPassword();
-        if (oldPassword.equals(user.getPassword())) {
-            user.setPassword(oldPassword);
+        if (rawPassword != null && !rawPassword.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(rawPassword));
         } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(userFromDB.getPassword());
         }
         userRepository.save(user);
     }
@@ -67,6 +66,7 @@ public class AdminServiceImpl implements AdminService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
     @Transactional(readOnly = true)
     @Override
     public User getUserByUsername(String username) {
@@ -78,5 +78,4 @@ public class AdminServiceImpl implements AdminService {
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Пользователя с таким ID не существует!"));
     }
-
 }
