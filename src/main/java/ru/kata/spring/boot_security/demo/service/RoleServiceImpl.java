@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
@@ -14,7 +13,6 @@ import java.util.Set;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
     private final RoleRepository roleRepository;
 
     public RoleServiceImpl(RoleRepository roleRepository) {
@@ -40,6 +38,9 @@ public class RoleServiceImpl implements RoleService {
         if(roles!=null){
             for (String roleName : roles) {
                 Role role = roleRepository.findByName(roleName);
+                if(role != null){
+                    userRoles.add(role);
+                }
             }
         }
         return userRoles;

@@ -19,12 +19,14 @@ public class UserControllers {
         this.adminService = adminService;
     }
 
-    @GetMapping("/profile")
+    @GetMapping()
     public String showProfile(Model model, Authentication auth) {
         String username = auth.getName();
         User user = adminService.getUserByUsername(username);
+        System.out.println("User email: " + user.getEmail());
+        System.out.println("User roles: " + user.getRoles());
         model.addAttribute("user", user);
-        return "user";
+        return "main";
     }
 }
 
