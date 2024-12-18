@@ -13,13 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -57,6 +57,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "idRole"))
     private Set<Role> roles;
 
+    @Transient
+    private String rolesAsString;
     public User() {
     }
 
@@ -152,6 +154,14 @@ public class User implements UserDetails {
                 '}';
     }
 
+    public void setRolesAsString(String rolesAsString) {
+        this.rolesAsString = rolesAsString;
+    }
+
+    public String getRolesAsString() {
+        return rolesAsString;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -168,4 +178,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hash(id, username, age, email, password, roles);
     }
+
 }
