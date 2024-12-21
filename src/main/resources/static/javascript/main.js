@@ -22,7 +22,7 @@ const userFetch = {
         'Referer': null
     },
     findAllUsers: async () => await fetch('api/admin/get-all-users'),
-    findUserByUsername: async () => await fetch(`api/admin/get-user`),
+    findUserByUsername: async () => await fetch(`api/user/get-user`),
     findOneUser: async (id) => await fetch(`api/admin/get-user-by-id/${id}`),
     addNewUser: async (user) => await fetch('api/admin/user-add', {
         method: 'POST',

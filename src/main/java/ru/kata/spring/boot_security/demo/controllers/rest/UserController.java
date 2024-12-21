@@ -19,7 +19,7 @@ public class UserController {
     public UserController(AdminService adminService) {
         this.adminService = adminService;
     }
-    @GetMapping("/profile")
+    @GetMapping("/get-user")
     public ResponseEntity<User> getUserProfile(Authentication auth) {
         String username = auth.getName();
         User user = adminService.getUserByUsername(username);
